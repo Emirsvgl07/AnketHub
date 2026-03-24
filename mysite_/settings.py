@@ -113,7 +113,7 @@ CLOUDINARY_STORAGE = {
 }
 
 # 2. KÜTÜPHANENİN ÇÖKMEMESİ İÇİN ESKİ SİSTEM (BYPASS)
-STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 # 3. DJANGO 6.0 İÇİN YENİ SİSTEM (STORAGES)
@@ -122,6 +122,7 @@ STORAGES = {
         "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
     },
     "staticfiles": {
-        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage", # 🌟 CSS'LERİ ARTIK WHITENOISE SUNACAK
     },
+}
 }
