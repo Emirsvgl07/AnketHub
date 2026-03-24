@@ -1,4 +1,4 @@
-﻿ AnketHub: AI-Powered Survey & Gamification Platform
+#﻿ AnketHub: AI-Powered Survey & Gamification Platform
 
 AnketHub, klasik ve sıkıcı anket formlarını modern bir kullanıcı deneyimi (UI/UX), yapay zeka ve oyunlaştırma dinamikleriyle birleştiren yeni nesil bir web uygulamasıdır.
 
