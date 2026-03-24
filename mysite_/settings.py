@@ -23,14 +23,23 @@ ALLOWED_HOSTS = ['anket-hub.com', 'www.anket-hub.com', 'ankethub.onrender.com','
 
 
 # Application definition
+
 INSTALLED_APPS = [
-    "polls.apps.PollsConfig",  # Bizim uygulamamız
+    # 🌟 CLOUDINARY BURAYA (Mutlaka staticfiles'ın üstünde olmalı)
+    'cloudinary_storage', 
+    
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    
+    # 🌟 CLOUDINARY KÜTÜPHANESİ
+    'cloudinary',
+
+    # Bizim uygulamamız
+    "polls.apps.PollsConfig",  
 ]
 
 MIDDLEWARE = [
@@ -119,6 +128,16 @@ USE_TZ = True
 # --- STATIC VE MEDIA DOSYALARI ---
 
 STATIC_URL = 'static/'
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+import os
+
+# Cloudinary Ayarları
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': os.environ.get('CLOUDINARY_CLOUD_NAME'),
+    'API_KEY': os.environ.get('CLOUDINARY_API_KEY'),
+    'API_SECRET': os.environ.get('CLOUDINARY_API_SECRET'),
+}
+
+# Varsayılan dosya depolama sistemi artık Cloudinary!
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
