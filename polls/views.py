@@ -8,11 +8,11 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 from django.shortcuts import redirect, get_object_or_404, render
-from django.http import HttpResponseRedirect, JsonResponse 
+from django.http import HttpResponseRedirect, JsonResponse
 from django.urls import reverse
 from django.views import generic
 from django.utils import timezone
-from django.db.models import Q 
+from django.db.models import Q
 from django.contrib.auth.models import User
 from django.template.loader import get_template
 from django.http import HttpResponse
@@ -22,9 +22,9 @@ from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.lib.fonts import addMapping
 
-import google.generativeai as genai 
-from .models import Choice, Question, Vote 
-from .forms import ExtendedUserCreationForm # YENİ EKLENDİ
+import google.generativeai as genai
+from .models import Choice, Question, Vote
+from .forms import ExtendedUserCreationForm
 
 # --- AI AYARLARI ---
 genai.configure(api_key=os.environ.get('GEMINI_API_KEY'))
@@ -128,7 +128,10 @@ def create_poll(request):
         question_text = request.POST.get('question_text')
         choices = request.POST.getlist('choice')
         image = request.FILES.get('image')
-        is_private = request.POST.get('is_private') == 'on'
+        
+        # 🐛 BUG FİX: Checkbox "true" veya "on" gönderebilir
+        is_private = request.POST.get('is_private') in ['on', 'true'] 
+        
         if question_text and choices:
             question = Question.objects.create(
                 question_text=question_text, pub_date=timezone.now(), author=request.user,
@@ -170,7 +173,7 @@ def ai_analyze_poll(request, question_id):
     {choices_text}
     """
     try:
-        model = genai.GenerativeModel('gemini-2.5-flash')
+        model = genai.GenerativeModel('gemini-1.5-flash') # AI Modeli Güncellendi
         response = model.generate_content(prompt)
         if response.text:
             return JsonResponse({'status': 'success', 'analysis': response.text})
@@ -197,7 +200,7 @@ def ai_draft_poll(request):
     {{"soru": "Ürettiğin Soru Metni", "siklar": ["Şık 1", "Şık 2", "Şık 3", "Şık 4"]}}
     """
     try:
-        model = genai.GenerativeModel('gemini-2.5-flash')
+        model = genai.GenerativeModel('gemini-1.5-flash') # AI Modeli Güncellendi
         response = model.generate_content(prompt)
         try:
             clean_json = re.search(r'\{.*\}', response.text, re.DOTALL).group()
@@ -222,7 +225,6 @@ def giris_yap(request):
         form = AuthenticationForm()
     return render(request, 'polls/login.html', {'form': form})
 
-# GÜNCELLENEN KAYIT OLMA FONKSİYONU
 def kayit_ol(request):
     if request.method == 'POST':
         form = ExtendedUserCreationForm(request.POST)
@@ -262,7 +264,6 @@ def hesap_ayarlari(request):
     }
     return render(request, 'polls/settings.html', context)
 
-# YENİ: ÜYELİK SATIN ALMA FONKSİYONU
 @login_required
 def buy_membership(request, plan):
     profile = request.user.profile
@@ -277,14 +278,13 @@ def buy_membership(request, plan):
 
     if profile.points >= selected_plan['cost']:
         profile.points -= selected_plan['cost']
-        profile.badge = selected_plan['badge'] # Profile modelinde badge alanın olduğunu varsayıyorum
+        profile.badge = selected_plan['badge'] 
         profile.save()
         messages.success(request, f'Tebrikler! Artık bir {selected_plan["name"]} üyesiniz! {selected_plan["badge"]}')
     else:
         messages.error(request, f'Yetersiz puan! {selected_plan["name"]} için {selected_plan["cost"]} 🪙 gerekiyor.')
 
     return redirect('polls:home')
-
 
 # --- KESİN ÇÖZÜM PDF OLUŞTURMA FONKSİYONU ---
 @login_required
