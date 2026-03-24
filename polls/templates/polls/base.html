@@ -1,0 +1,246 @@
+﻿{% load static i18n %}
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AnketHub - {% trans "Modern Anket Platformu" %}</title>
+    <link rel="icon" type="image/png" href="{% static 'polls/logo-hub.png' %}?v=1">
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+
+        /* Tema Geçişleri İçin Yardımcı Sınıflar */
+        .light-mode {
+            background-color: #f8fafc;
+            color: #0f172a;
+        }
+
+            .light-mode .backdrop-blur-md {
+                background-color: rgba(255, 255, 255, 0.7);
+                border-color: rgba(0,0,0,0.1);
+            }
+
+            .light-mode #sidebar {
+                background-color: rgba(255, 255, 255, 0.95);
+                border-color: rgba(0,0,0,0.1);
+            }
+
+                .light-mode #sidebar h3, .light-mode #sidebar a, .light-mode #sidebar span, .light-mode #sidebar p {
+                    color: #0f172a;
+                }
+    </style>
+</head>
+<body id="main-body" class="bg-slate-950 min-h-screen text-slate-200 overflow-x-hidden relative flex flex-col">
+
+    <div id="bg-glow-1" class="fixed top-[-10%] left-[-10%] w-[500px] h-[500px] bg-blue-600/30 rounded-full mix-blend-screen filter blur-[120px] pointer-events-none z-0"></div>
+    <div id="bg-glow-2" class="fixed bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-purple-600/30 rounded-full mix-blend-screen filter blur-[120px] pointer-events-none z-0"></div>
+
+    <nav class="sticky top-0 z-40 backdrop-blur-md bg-slate-950/50 border-b border-white/10 p-4 shadow-sm">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <a href="{% url 'polls:home' %}" class="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent hover:scale-105 transition-transform">
+                AnketHub
+            </a>
+
+            <div class="flex items-center gap-4">
+                <a href="{% url 'polls:index' %}" class="hidden md:block text-slate-300 hover:text-white transition-colors font-medium">{% trans "Tüm Anketler" %}</a>
+
+                <form action="{% url 'set_language' %}" method="post" class="flex items-center bg-slate-900/80 border border-slate-700/50 rounded-lg p-0.5 m-0 h-[34px]">
+                    {% csrf_token %}
+                    <input name="next" type="hidden" value="{{ request.get_full_path }}">
+                    <button type="submit" name="language" value="tr" class="flex items-center justify-center h-full px-2.5 text-[11px] font-black tracking-wider rounded-md transition-all leading-none {% if LANGUAGE_CODE == 'tr' %}bg-blue-600 text-white shadow-md{% else %}text-slate-400 hover:text-white hover:bg-white/5{% endif %}">
+                        TR
+                    </button>
+                    <button type="submit" name="language" value="en" class="flex items-center justify-center h-full px-2.5 text-[11px] font-black tracking-wider rounded-md transition-all leading-none {% if LANGUAGE_CODE == 'en' %}bg-blue-600 text-white shadow-md{% else %}text-slate-400 hover:text-white hover:bg-white/5{% endif %}">
+                        EN
+                    </button>
+                </form>
+
+                {% if user.is_authenticated %}
+                <div class="flex items-center gap-3">
+
+                    <div class="hidden sm:flex items-center gap-1.5 px-3 py-1.5 bg-slate-900/60 border border-white/10 rounded-xl hover:bg-slate-800 transition-colors shadow-inner cursor-help" title="{% trans 'Kullanılabilir Puanın' %}">
+                        <span class="text-amber-400 font-bold text-sm">{{ user.profile.points }}</span>
+                        <span class="text-sm">🪙</span>
+                    </div>
+
+                    <a href="{% url 'polls:create' %}" class="hidden sm:block px-4 py-2 text-sm font-semibold text-white bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg shadow-[0_0_15px_rgba(147,51,234,0.3)] hover:shadow-[0_0_20px_rgba(147,51,234,0.5)] transition-all hover:-translate-y-0.5">
+                        + {% trans "Anket Oluştur" %}
+                    </a>
+
+                    <button onclick="sidebarGoster()" class="w-10 h-10 rounded-full bg-gradient-to-tr from-purple-500 to-blue-500 p-0.5 cursor-pointer hover:scale-105 transition-transform shadow-lg">
+                        <div class="w-full h-full bg-slate-900 rounded-full flex items-center justify-center text-sm font-bold text-white">
+                            {{ user.username|make_list|first|upper }}
+                        </div>
+                    </button>
+                </div>
+                {% else %}
+                <div class="flex gap-3">
+                    <a href="{% url 'polls:login' %}" class="px-4 py-2 text-sm font-medium text-slate-300 hover:text-white transition-colors flex items-center">{% trans "Giriş Yap" %}</a>
+                    <a href="{% url 'polls:register' %}" class="px-4 py-2 text-sm font-medium bg-white/10 border border-white/20 rounded-lg hover:bg-white/20 transition-all">{% trans "Hesap Oluştur" %}</a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    {% if user.is_authenticated %}
+    <div id="sidebar" class="fixed inset-y-0 right-0 w-80 bg-slate-900/95 backdrop-blur-xl border-l border-white/10 z-50 transform translate-x-full transition-transform duration-300 shadow-[0_0_40px_rgba(0,0,0,0.5)] flex flex-col">
+
+        <div class="p-6 border-b border-white/10 flex justify-between items-start bg-white/5">
+            <div>
+                <h3 class="text-xl font-bold text-white mb-1">{{ user.username }}</h3>
+                <div class="flex items-center gap-2 text-sm">
+                    <span class="text-purple-400 font-medium">{{ user.profile.dinamik_seviye }}</span>
+                    <span class="text-slate-500">•</span>
+                    <span class="text-amber-400 font-bold">{{ user.profile.points }} 🪙</span>
+                </div>
+            </div>
+            <button onclick="sidebarGizle()" class="text-slate-400 hover:text-white text-3xl leading-none transition-colors">&times;</button>
+        </div>
+
+        <div class="p-6 flex-1 flex flex-col gap-2">
+            <a href="{% url 'polls:create' %}" class="sm:hidden flex items-center gap-3 w-full p-3 mb-2 rounded-xl bg-gradient-to-r from-blue-600/20 to-purple-600/20 border border-purple-500/30 text-purple-300 hover:bg-purple-600/30 transition-all font-semibold">
+                ✨ {% trans "Yeni Anket Oluştur" %}
+            </a>
+
+            <a href="{% url 'polls:my_polls' %}" class="flex items-center gap-3 w-full p-3 rounded-xl hover:bg-white/5 transition-all text-left text-slate-300 hover:text-white font-medium">
+                📊 {% trans "Anketlerim" %}
+            </a>
+            <a href="{% url 'polls:settings' %}" class="flex items-center gap-3 w-full p-3 rounded-xl hover:bg-white/5 transition-all text-left text-slate-300 hover:text-white font-medium">
+                ⚙️ {% trans "Hesap Ayarları" %}
+            </a>
+
+            <div class="my-4 border-t border-white/10"></div>
+
+            <div class="flex items-center justify-between p-3 text-slate-300 font-medium">
+                <span>{% trans "Tema Değiştir" %}</span>
+                <button onclick="temaDegistir()" id="theme-btn" class="w-12 h-6 bg-purple-600 rounded-full relative transition-colors duration-300 shadow-inner">
+                    <div id="theme-circle" class="w-5 h-5 bg-white rounded-full absolute top-0.5 left-0.5 shadow-sm transition-all duration-300"></div>
+                </button>
+            </div>
+        </div>
+
+        <div class="p-6 border-t border-white/10">
+            <a href="{% url 'polls:logout' %}" class="block text-center w-full p-3 rounded-xl text-red-400 hover:bg-red-500 hover:text-white transition-colors font-bold border border-red-500/30 hover:border-transparent">
+                {% trans "Çıkış Yap" %}
+            </a>
+        </div>
+    </div>
+
+    <div id="sidebar-overlay" onclick="sidebarGizle()" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 hidden opacity-0 transition-opacity duration-300"></div>
+    {% endif %}
+
+    <main class="flex-1 max-w-7xl mx-auto w-full p-6 relative z-10">
+        {% block content %}{% endblock %}
+    </main>
+
+    <script>
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebar-overlay');
+        const body = document.getElementById('main-body');
+        const themeBtn = document.getElementById('theme-btn');
+        const themeCircle = document.getElementById('theme-circle');
+
+        function sidebarGoster() {
+            if (sidebar && overlay) {
+                sidebar.classList.remove('translate-x-full');
+                overlay.classList.remove('hidden');
+                setTimeout(() => overlay.classList.remove('opacity-0'), 10);
+            }
+        }
+
+        function sidebarGizle() {
+            if (sidebar && overlay) {
+                sidebar.classList.add('translate-x-full');
+                overlay.classList.add('opacity-0');
+                setTimeout(() => overlay.classList.add('hidden'), 300);
+            }
+        }
+
+        function temaUygula() {
+            const isLight = localStorage.getItem('theme') === 'light';
+            if (isLight) {
+                body.classList.add('light-mode');
+                if (themeCircle) themeCircle.style.transform = 'translateX(1.5rem)';
+                if (themeBtn) themeBtn.classList.replace('bg-purple-600', 'bg-slate-400');
+            } else {
+                body.classList.remove('light-mode');
+                if (themeCircle) themeCircle.style.transform = 'translateX(0)';
+                if (themeBtn) themeBtn.classList.replace('bg-slate-400', 'bg-purple-600');
+            }
+        }
+
+        function temaDegistir() {
+            const isLight = localStorage.getItem('theme') === 'light';
+            localStorage.setItem('theme', isLight ? 'dark' : 'light');
+            temaUygula();
+        }
+
+        function uyariGoster(mesaj, icon = 'info') {
+            const Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                background: '#1e293b',
+                color: '#fff'
+            });
+
+            Toast.fire({
+                icon: icon,
+                title: mesaj
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            temaUygula();
+
+            {% if messages %}
+                const DjangoToast = Swal.mixin({
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 4000,
+                    timerProgressBar: true,
+                    background: '#1e293b',
+                    color: '#fff',
+                    didOpen: (toast) => {
+                        toast.onmouseenter = Swal.stopTimer;
+                        toast.onmouseleave = Swal.resumeTimer;
+                    }
+                });
+
+                {% for message in messages %}
+                    DjangoToast.fire({
+                        icon: '{% if message.tags == "error" %}error{% elif message.tags == "success" %}success{% elif message.tags == "warning" %}warning{% else %}info{% endif %}',
+                        title: '{{ message|escapejs }}'
+                    });
+                {% endfor %}
+            {% endif %}
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,204 @@
+﻿{% extends "polls/base.html" %}
+{% load i18n %}
+
+{% block content %}
+<div class="animate-fade-in space-y-20 pb-20">
+
+    <div class="mt-4 bg-gradient-to-r from-purple-600/30 via-blue-500/30 to-purple-600/30 border border-purple-500/50 rounded-2xl p-5 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-[0_0_30px_rgba(147,51,234,0.25)] relative overflow-hidden">
+        <div class="absolute -left-10 -top-10 w-40 h-40 bg-purple-500/20 blur-[50px]"></div>
+        <div class="flex items-center gap-4 relative z-10">
+            <div class="text-4xl animate-bounce">🎁</div>
+            <div>
+                <h3 class="text-white font-bold text-xl flex items-center gap-2">
+                    AnketHub {% trans "Lansman Özel" %}
+                    {% if kalan_kontenjan > 0 %}
+                    <span class="bg-red-500 text-white text-[10px] px-2 py-1 rounded-full animate-pulse">{% trans "SINIRLI KONTENJAN" %}</span>
+                    {% endif %}
+                </h3>
+
+                {% if kalan_kontenjan > 0 %}
+                <p class="text-purple-100 text-sm">
+                    {% trans "İlk 500 şanslı üyeye anında" %} <strong class="text-amber-400 text-lg">300 🪙 {% trans "Puan" %}</strong> {% trans "hediye!" %}
+                    <span class="text-white/60 ml-1">({% trans "Şu an:" %} {{ toplam_uye }}/500)</span>
+                </p>
+                {% else %}
+                <p class="text-slate-400 text-sm italic">{% trans "Hediye puan kampanyamız sona ermiştir. İlginize teşekkürler!" %}</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="flex flex-col items-center sm:items-end gap-2 relative z-10">
+            {% if kalan_kontenjan > 0 %}
+            <div class="text-white font-mono text-sm bg-black/40 px-3 py-1 rounded-lg border border-white/10">
+                {% trans "Kalan Slot:" %} <span class="text-green-400 font-bold text-lg">{{ kalan_kontenjan }}</span>
+            </div>
+            {% if not user.is_authenticated %}
+            <a href="{% url 'polls:register' %}" class="px-6 py-2 bg-amber-500 hover:bg-amber-400 text-black font-black rounded-xl transition-all shadow-lg hover:scale-105 active:scale-95 uppercase text-sm">
+                {% trans "Puanımı Al" %} &rarr;
+            </a>
+            {% endif %}
+            {% else %}
+            <span class="text-slate-500 font-bold text-sm uppercase tracking-widest">{% trans "Kayıtlar Devam Ediyor" %}</span>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="text-center pt-10">
+        <h1 class="text-5xl md:text-7xl font-bold text-white mb-6 tracking-tight">
+            {% trans "Fikrini Sor," %} <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">{% trans "Puanları Topla." %}</span>
+        </h1>
+        <p class="text-xl text-slate-400 max-w-2xl mx-auto mb-10">
+            {% trans "Sıkıcı anket formlarını unutun." %} AnketHub {% trans "ile topluluğun nabzını tutun, görevleri tamamlayın ve seviye atlayın." %}
+        </p>
+        <div class="flex flex-col sm:flex-row justify-center gap-4">
+            <a href="{% url 'polls:index' %}" class="px-8 py-4 rounded-xl font-bold text-white bg-gradient-to-r from-blue-600 to-purple-600 shadow-[0_0_20px_rgba(147,51,234,0.3)] hover:shadow-[0_0_30px_rgba(147,51,234,0.5)] transition-all hover:-translate-y-1 text-lg">
+                {% trans "Anketleri Keşfet" %}
+            </a>
+            {% if not user.is_authenticated %}
+            <a href="{% url 'polls:register' %}" class="px-8 py-4 rounded-xl font-bold text-white bg-slate-800 hover:bg-slate-700 border border-slate-600 transition-all text-lg">
+                {% trans "Ücretsiz Hesap Oluştur" %}
+            </a>
+            {% endif %}
+        </div>
+    </div>
+
+    <div>
+        <h3 class="text-3xl font-bold text-white mb-10 text-center">{% trans "Sistem Nasıl İşliyor?" %}</h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+            <div class="p-8 bg-slate-900/50 border border-white/10 rounded-3xl text-center relative overflow-hidden group hover:-translate-y-2 transition-all duration-300">
+                <div class="text-5xl mb-6 relative z-10">✍️</div>
+                <h4 class="text-xl font-bold text-white mb-3 relative z-10">1. {% trans "Fikrini Sor" %}</h4>
+                <p class="text-slate-400 relative z-10">{% trans "50 🪙 harcayarak herkese açık veya gizli grup anketleri oluştur. Anında sonuçları gör." %}</p>
+            </div>
+            <div class="p-8 bg-slate-900/50 border border-white/10 rounded-3xl text-center relative overflow-hidden group hover:-translate-y-2 transition-all duration-300">
+                <div class="text-5xl mb-6 relative z-10">🎯</div>
+                <h4 class="text-xl font-bold text-white mb-3 relative z-10">2. {% trans "Oyla & Kazan" %}</h4>
+                <p class="text-slate-400 relative z-10">{% trans "Topluluk anketlerine katılıp fikirlerini belirt, anında 10 🪙 kazanarak cüzdanını doldur." %}</p>
+            </div>
+            <div class="p-8 bg-slate-900/50 border border-white/10 rounded-3xl text-center relative overflow-hidden group hover:-translate-y-2 transition-all duration-300">
+                <div class="text-5xl mb-6 relative z-10">👑</div>
+                <h4 class="text-xl font-bold text-white mb-3 relative z-10">3. {% trans "Seviye Atla" %}</h4>
+                <p class="text-slate-400 relative z-10">{% trans "Puanlarını biriktir, Çaylak seviyesinden Üstat seviyesine yüksel ve rozetleri kap." %}</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="relative">
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3/4 h-64 bg-blue-600/10 rounded-full filter blur-[100px] pointer-events-none"></div>
+
+        <div class="text-center mb-12 relative z-10">
+            <h2 class="text-3xl font-bold text-white mb-4">🏆 {% trans "Topluluk Liderleri" %}</h2>
+            <p class="text-slate-400 max-w-2xl mx-auto">{% trans "En çok anket çözen ve üreten ilk 10 şampiyonumuz." %}</p>
+        </div>
+
+        <div class="max-w-4xl mx-auto bg-slate-900/40 border border-white/10 rounded-3xl p-6 backdrop-blur-xl shadow-2xl relative z-10">
+            <div class="space-y-3">
+                {% for top_user in top_users %}
+                <div class="flex items-center justify-between p-4 rounded-2xl border transition-all duration-300 hover:scale-[1.02] hover:shadow-lg
+                        {% if forloop.counter == 1 %} bg-gradient-to-r from-amber-500/20 to-orange-600/10 border-amber-500/50
+                        {% elif forloop.counter == 2 %} bg-gradient-to-r from-slate-300/20 to-slate-500/10 border-slate-400/50
+                        {% elif forloop.counter == 3 %} bg-gradient-to-r from-orange-400/20 to-red-500/10 border-orange-500/50
+                        {% else %} bg-white/5 border-white/10 hover:bg-white/10 {% endif %}">
+
+                    <div class="flex items-center gap-4">
+                        <div class="flex items-center justify-center w-12 h-12 rounded-full font-bold text-lg
+                                {% if forloop.counter == 1 %} bg-gradient-to-br from-amber-300 to-amber-600 text-black shadow-[0_0_15px_rgba(245,158,11,0.5)]
+                                {% elif forloop.counter == 2 %} bg-gradient-to-br from-slate-200 to-slate-400 text-black shadow-[0_0_15px_rgba(203,213,225,0.5)]
+                                {% elif forloop.counter == 3 %} bg-gradient-to-br from-orange-300 to-orange-600 text-black shadow-[0_0_15px_rgba(249,115,22,0.5)]
+                                {% else %} bg-slate-800 text-slate-400 border border-slate-700 {% endif %}">
+                            {% if forloop.counter == 1 %}👑
+                            {% elif forloop.counter == 2 %}🥈
+                            {% elif forloop.counter == 3 %}🥉
+                            {% else %}#{{ forloop.counter }}{% endif %}
+                        </div>
+
+                        <div>
+                            <h4 class="text-lg font-bold text-white flex items-center gap-2">
+                                {{ top_user.username }}
+                                {% if top_user == request.user %}
+                                <span class="text-[10px] bg-blue-500 text-white px-2 py-0.5 rounded-full uppercase tracking-wider animate-pulse">{% trans "Sen" %}</span>
+                                {% endif %}
+                            </h4>
+                            <span class="text-sm text-slate-400">{{ top_user.profile.dinamik_seviye }}</span>
+                        </div>
+                    </div>
+
+                    <div class="text-right">
+                        <span class="text-2xl font-black
+                                {% if forloop.counter == 1 %}text-amber-400
+                                {% elif forloop.counter == 2 %}text-slate-300
+                                {% elif forloop.counter == 3 %}text-orange-400
+                                {% else %}text-white{% endif %}">
+                            {{ top_user.profile.points }}
+                        </span>
+                        <span class="text-amber-400 text-lg ml-1">🪙</span>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="text-center py-10">
+                    <span class="text-4xl">👻</span>
+                    <p class="text-slate-400 mt-4">{% trans "Henüz kimse puan kazanmamış. Liderlik koltuğu boş, hemen ilk anketini çöz!" %}</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <div class="text-center mb-12">
+            <h2 class="text-3xl font-bold text-white mb-4">{% trans "Puan Market & Üyelikler" %}</h2>
+            <p class="text-slate-400 max-w-2xl mx-auto">{% trans "Anket çözerek kazandığınız puanlarla profilinizi bir üst seviyeye taşıyın." %}</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            <div class="bg-slate-900/50 border border-white/10 rounded-3xl p-8 flex flex-col relative transition-transform hover:-translate-y-2 duration-300">
+                <h3 class="text-xl font-bold text-white mb-2">{% trans "Standart Üye" %}</h3>
+                <p class="text-slate-400 text-sm mb-6">{% trans "Sisteme yeni katılan herkes için." %}</p>
+                <div class="mb-6">
+                    <span class="text-4xl font-bold text-white">{% if kalan_kontenjan > 0 %}300{% else %}0{% endif %} 🪙</span>
+                    <span class="text-slate-500">/{% trans "hediye" %}</span>
+                </div>
+                <ul class="space-y-4 mb-8 flex-grow">
+                    <li class="flex items-center gap-3 text-slate-300"><span class="text-emerald-400">✓</span> {% trans "Topluluk anketlerine katılım" %}</li>
+                    <li class="flex items-center gap-3 text-slate-300"><span class="text-emerald-400">✓</span> {% trans "Anket başına 10 🪙 kazanç" %}</li>
+                </ul>
+                <button disabled class="w-full py-3 rounded-xl font-bold text-slate-400 bg-white/5 border border-white/10">{% trans "Sana Özel Başlangıç" %}</button>
+            </div>
+
+            <div class="bg-gradient-to-b from-purple-900/40 to-slate-900/80 border border-purple-500/50 rounded-3xl p-8 flex flex-col relative transform md:-translate-y-4 shadow-[0_0_30px_rgba(147,51,234,0.2)]">
+                <div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-blue-500 to-purple-500 text-white px-4 py-1 rounded-full text-xs font-bold tracking-wider uppercase shadow-lg">{% trans "En Popüler" %}</div>
+                <h3 class="text-xl font-bold text-purple-300 mb-2">{% trans "Premium Anketör" %}</h3>
+                <p class="text-slate-400 text-sm mb-6">{% trans "Platformda öne çıkmak isteyenler için." %}</p>
+                <div class="mb-6">
+                    <span class="text-4xl font-bold text-white">500 🪙</span>
+                    <span class="text-slate-500">/{% trans "aylık" %}</span>
+                </div>
+                <ul class="space-y-4 mb-8 flex-grow">
+                    <li class="flex items-center gap-3 text-slate-200"><span class="text-emerald-400 font-bold">✓</span> {% trans "İsminin yanında 🌟 VIP Rozeti" %}</li>
+                    <li class="flex items-center gap-3 text-slate-200"><span class="text-emerald-400 font-bold">✓</span> {% trans "Anket çözünce 1.5x kazanç" %}</li>
+                </ul>
+                <a href="{% url 'polls:buy_membership' 'premium' %}" class="block text-center w-full py-3 rounded-xl font-bold text-white bg-purple-600 hover:bg-purple-500 shadow-lg transition-colors">
+                    {% trans "500 🪙 İle Satın Al" %}
+                </a>
+            </div>
+
+            <div class="bg-slate-900/50 border border-white/10 rounded-3xl p-8 flex flex-col relative transition-transform hover:-translate-y-2 duration-300">
+                <h3 class="text-xl font-bold text-amber-400 mb-2">{% trans "Efsanevi Üstat" %}</h3>
+                <p class="text-slate-400 text-sm mb-6">{% trans "Sınır tanımayan profesyoneller için." %}</p>
+                <div class="mb-6">
+                    <span class="text-4xl font-bold text-white">2000 🪙</span>
+                    <span class="text-slate-500">/{% trans "kalıcı" %}</span>
+                </div>
+                <ul class="space-y-4 mb-8 flex-grow">
+                    <li class="flex items-center gap-3 text-slate-300"><span class="text-emerald-400">✓</span> {% trans "Üstat tacı 👑 rozeti" %}</li>
+                    <li class="flex items-center gap-3 text-slate-300"><span class="text-emerald-400">✓</span> {% trans "Ücretsiz sınırsız anket" %}</li>
+                </ul>
+                <a href="{% url 'polls:buy_membership' 'legend' %}" class="block text-center w-full py-3 rounded-xl font-bold text-white bg-slate-800 hover:bg-slate-700 border border-white/10 transition-colors">
+                    {% trans "2000 🪙 İle Satın Al" %}
+                </a>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

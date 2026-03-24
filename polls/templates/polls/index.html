@@ -1,0 +1,108 @@
+﻿{% extends "polls/base.html" %}
+
+{% block content %}
+<div class="py-10 animate-fade-in">
+
+    <div class="flex justify-between items-center mb-6 border-b border-white/10 pb-4">
+        <h2 class="text-3xl font-bold text-white">Anket Panosu</h2>
+    </div>
+
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
+        <div class="bg-white/5 border border-white/10 rounded-2xl p-4 backdrop-blur-sm text-center hover:bg-white/10 transition-colors">
+            <p class="text-slate-400 text-sm mb-1">Toplam Anket</p>
+            <p class="text-2xl font-bold text-white">{{ total_count|default:"0" }}</p>
+        </div>
+        <div class="bg-emerald-500/10 border border-emerald-500/20 rounded-2xl p-4 backdrop-blur-sm text-center hover:bg-emerald-500/20 transition-colors">
+            <p class="text-emerald-400/80 text-sm mb-1">Aktif Anketler</p>
+            <p class="text-2xl font-bold text-emerald-400">{{ active_count|default:"0" }}</p>
+        </div>
+
+        {% if user.is_authenticated %}
+        <div class="bg-purple-500/10 border border-purple-500/20 rounded-2xl p-4 backdrop-blur-sm text-center hover:bg-purple-500/20 transition-colors">
+            <p class="text-purple-400/80 text-sm mb-1">Çözdüklerin</p>
+            <p class="text-2xl font-bold text-purple-400">{{ solved_count|default:"0" }}</p>
+        </div>
+        <div class="bg-blue-500/10 border border-blue-500/20 rounded-2xl p-4 backdrop-blur-sm text-center hover:bg-blue-500/20 transition-colors">
+            <p class="text-blue-400/80 text-sm mb-1">Bekleyenler</p>
+            <p class="text-2xl font-bold text-blue-400">{{ unsolved_count|default:"0" }}</p>
+        </div>
+        {% else %}
+        <div class="col-span-2 bg-white/5 border border-white/10 rounded-2xl p-4 backdrop-blur-sm flex items-center justify-center">
+            <p class="text-slate-400 text-sm">İstatistiklerini görmek için <a href="{% url 'polls:login' %}" class="text-purple-400 hover:underline font-bold">giriş yap</a>.</p>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="flex flex-wrap gap-4 mb-8">
+        <a href="?tab=all" class="px-6 py-2 rounded-xl font-medium transition-all duration-200 {% if current_tab == 'all' or not current_tab %}bg-purple-600 text-white shadow-[0_0_15px_rgba(147,51,234,0.4)]{% else %}bg-white/5 text-slate-400 hover:bg-white/10 hover:text-white border border-white/10{% endif %}">
+            🌍 Tüm Anketler
+        </a>
+        <a href="?tab=official" class="px-6 py-2 rounded-xl font-medium transition-all duration-200 {% if current_tab == 'official' %}bg-gradient-to-r from-amber-500 to-orange-600 text-white shadow-[0_0_15px_rgba(245,158,11,0.4)]{% else %}bg-white/5 text-slate-400 hover:bg-white/10 hover:text-white border border-white/10{% endif %}">
+            👑 AnketHub Özel
+        </a>
+        <a href="?tab=community" class="px-6 py-2 rounded-xl font-medium transition-all duration-200 {% if current_tab == 'community' %}bg-blue-600 text-white shadow-[0_0_15px_rgba(37,99,235,0.4)]{% else %}bg-white/5 text-slate-400 hover:bg-white/10 hover:text-white border border-white/10{% endif %}">
+            👥 Topluluk
+        </a>
+    </div>
+
+    {% if latest_question_list %}
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for question in latest_question_list %}
+        <a href="{% url 'polls:detail' question.id %}" class="block p-6 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm hover:bg-white/10 transition-colors group flex flex-col h-full relative overflow-hidden">
+            {% if question.image %}
+            <div class="mb-4 overflow-hidden rounded-xl shrink-0">
+                <img src="{{ question.image.url }}" alt="{{ question.question_text }}" class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-500">
+            </div>
+            {% endif %}
+
+            <div class="flex-grow">
+                <div class="flex items-center gap-2 mb-4 flex-wrap">
+                    <span class="text-xs font-semibold px-3 py-1 bg-purple-500/20 text-purple-300 rounded-full">#{{ question.id }}</span>
+
+                    {% if user.is_authenticated and question.id in voted_questions %}
+                    <span class="text-xs font-bold px-3 py-1 bg-emerald-500/20 text-emerald-400 rounded-full border border-emerald-500/30">✅ Çözüldü</span>
+                    {% else %}
+                    <span class="text-xs font-bold px-3 py-1 bg-blue-500/20 text-blue-400 rounded-full border border-blue-500/30">✨ Yeni</span>
+                    {% endif %}
+
+                    {% if question.author.is_superuser %}
+                    <span class="text-xs font-bold px-3 py-1 bg-amber-500/20 text-amber-400 rounded-full border border-amber-500/30 ml-auto">👑 AnketHub</span>
+                    {% elif question.author %}
+                    <span class="text-xs font-medium px-3 py-1 bg-slate-800 text-slate-300 rounded-full border border-slate-700 ml-auto">
+                        👤 {{ question.author.username }} <span class="text-slate-500">{{ question.author.profile.badge }}</span>
+                    </span>
+                    {% endif %}
+                </div>
+
+                <h3 class="text-xl font-bold text-white mb-2 group-hover:text-purple-400 transition-colors">{{ question.question_text }}</h3>
+
+                {% if user.is_authenticated and question.id in voted_questions %}
+                <p class="text-slate-400 text-sm mb-6 line-clamp-2">Bu anketi zaten çözdün. Sonuçları görmek için tıkla.</p>
+                {% else %}
+                <p class="text-slate-400 text-sm mb-6 line-clamp-2">Bu ankete katılıp fikrini belirtmek için tıkla.</p>
+                {% endif %}
+            </div>
+
+            <div class="flex justify-between items-center text-sm shrink-0 mt-auto pt-4 border-t border-white/5">
+                <div class="flex items-center gap-4 text-slate-500">
+                    <span class="flex items-center gap-1">🕒 {{ question.pub_date|date:"d M Y" }}</span>
+                    <span class="flex items-center gap-1">📊 {{ question.total_votes }} Oy</span>
+                </div>
+
+                {% if user.is_authenticated and question.id in voted_questions %}
+                <span class="text-emerald-400 font-medium group-hover:translate-x-1 transition-transform">Sonuçlar &rarr;</span>
+                {% else %}
+                <span class="text-blue-400 font-medium group-hover:translate-x-1 transition-transform">Katıl &rarr;</span>
+                {% endif %}
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="text-center py-20 bg-slate-900/50 rounded-2xl border border-white/10 backdrop-blur-sm">
+        <div class="text-5xl mb-4">📭</div>
+        <p class="text-xl text-slate-400 font-medium">Bu kategoride henüz anket bulunmuyor.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

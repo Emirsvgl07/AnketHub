@@ -1,0 +1,228 @@
+﻿{% extends "polls/base.html" %}
+
+{% block content %}
+<div class="py-10 flex justify-center animate-fade-in">
+    <div class="w-full max-w-2xl p-8 bg-slate-900/80 border border-white/10 rounded-3xl backdrop-blur-xl shadow-2xl">
+
+        <a href="{% url 'polls:index' %}" class="text-slate-400 hover:text-white text-sm mb-6 inline-flex items-center gap-2 transition-colors">
+            &larr; Tüm Anketlere Dön
+        </a>
+
+        {% if question.image %}
+        <div class="mb-8 rounded-2xl overflow-hidden border border-white/10 relative group shadow-lg">
+            <img src="{{ question.image.url }}" alt="{{ question.question_text }}" class="w-full max-h-[350px] object-cover transition-transform duration-700 group-hover:scale-105">
+            <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent pointer-events-none"></div>
+        </div>
+        {% endif %}
+
+        <div class="text-center mb-8">
+            <h2 class="text-xl font-bold text-slate-400 uppercase tracking-widest mb-2">Canlı Sonuçlar</h2>
+            <p class="text-3xl text-white font-bold">{{ question.question_text }}</p>
+        </div>
+
+        {% if question.total_votes > 0 %}
+        <div class="mb-12 relative w-full max-w-[300px] mx-auto">
+            <canvas id="resultsChart"></canvas>
+            <div class="absolute inset-0 flex items-center justify-center pointer-events-none flex-col">
+                <span class="text-4xl font-bold text-white">{{ question.total_votes }}</span>
+                <span class="text-xs text-slate-400 uppercase tracking-wider">Toplam Oy</span>
+            </div>
+        </div>
+        {% else %}
+        <div class="text-center py-10 mb-8 bg-white/5 rounded-2xl border border-white/10">
+            <div class="text-4xl mb-3">📊</div>
+            <p class="text-slate-400 font-medium">Henüz oy kullanılmamış.</p>
+        </div>
+        {% endif %}
+
+        <div class="space-y-4 mb-8">
+            {% for choice in question.choice_set.all %}
+            <div class="p-4 border border-white/10 rounded-2xl bg-slate-800/50 relative overflow-hidden group hover:border-white/20 transition-colors">
+
+                {% if question.total_votes > 0 %}
+                <div class="absolute top-0 left-0 h-full bg-gradient-to-r from-purple-600/20 to-blue-600/20 transition-all duration-1000 ease-out"
+                     style="width: {% widthratio choice.votes question.total_votes 100 %}%;">
+                </div>
+                {% endif %}
+
+                <div class="relative z-10 flex justify-between items-center">
+                    <div class="flex flex-col">
+                        <span class="text-lg text-slate-200 font-medium flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full inline-block color-dot"></span>
+                            {{ choice.choice_text }}
+                        </span>
+                        <span class="text-sm text-purple-400 mt-1 font-semibold">
+                            {% if question.total_votes > 0 %}
+                            %{% widthratio choice.votes question.total_votes 100 %}
+                            {% else %}
+                            %0
+                            {% endif %}
+                        </span>
+                    </div>
+                    <span class="text-white font-bold bg-slate-900 border border-white/10 px-4 py-1.5 rounded-lg shadow-lg">
+                        {{ choice.votes }} Oy
+                    </span>
+                </div>
+
+            </div>
+            {% endfor %}
+        </div>
+
+        {% if question.total_votes > 0 %}
+        <div class="mt-10 mb-6">
+            <button id="ai-analyze-btn" onclick="aiAnalizYap('{% url 'polls:ai_analyze' question.id %}')" class="w-full flex items-center justify-center gap-3 px-6 py-4 rounded-2xl font-bold text-white bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 hover:shadow-[0_0_30px_rgba(168,85,247,0.4)] transition-all duration-300 hover:scale-[1.02] relative overflow-hidden group">
+                <div class="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out"></div>
+                <span class="text-2xl relative z-10">✨</span>
+                <span class="relative z-10">AI ile Sonuçları Yorumla</span>
+            </button>
+
+            <div id="ai-result-box" class="hidden mt-6 p-6 rounded-2xl bg-slate-900/90 border border-purple-500/50 shadow-[0_0_20px_rgba(147,51,234,0.15)] relative">
+                <div class="absolute -top-3 left-6 px-3 py-1 bg-gradient-to-r from-blue-500 to-purple-500 text-white text-xs font-bold rounded-full">
+                    AnketHub AI
+                </div>
+
+                <div id="ai-loading" class="flex flex-col items-center justify-center py-4">
+                    <div class="w-8 h-8 border-4 border-purple-500/30 border-t-purple-500 rounded-full animate-spin mb-3"></div>
+                    <p class="text-slate-400 text-sm animate-pulse">Yapay zeka verileri analiz ediyor...</p>
+                </div>
+
+                <div id="ai-text" class="hidden text-slate-300 leading-relaxed text-sm md:text-base">
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="flex flex-col md:flex-row justify-between items-center mt-10 pt-6 border-t border-white/10 gap-4">
+
+            <button onclick="kopyalaLink()" class="w-full md:w-auto px-6 py-3 rounded-xl font-medium text-slate-300 hover:text-white bg-white/5 border border-white/10 hover:bg-white/10 transition-colors text-center flex items-center justify-center gap-2">
+                🔗 Paylaş
+            </button>
+
+            <a href="{% url 'polls:download_pdf' question.id %}" target="_blank" class="w-full md:w-auto px-6 py-3 rounded-xl font-bold text-white bg-red-500/20 border border-red-500/50 hover:bg-red-500/40 transition-all text-center flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(239,68,68,0.2)]">
+                📄 Raporu PDF İndir
+            </a>
+
+            <a href="{% url 'polls:index' %}" class="w-full md:w-auto px-8 py-3 rounded-xl font-bold text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:shadow-[0_0_20px_rgba(147,51,234,0.4)] transition-all text-center">
+                Başka Anket Çöz
+            </a>
+
+        </div>
+
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+
+        // --- YAPAY ZEKA AJAX FONKSİYONU ---
+        window.aiAnalizYap = function (fetchUrl) {
+            const btn = document.getElementById('ai-analyze-btn');
+            const resultBox = document.getElementById('ai-result-box');
+            const loading = document.getElementById('ai-loading');
+            const aiText = document.getElementById('ai-text');
+
+            btn.disabled = true;
+            btn.classList.add('opacity-50', 'cursor-not-allowed');
+            resultBox.classList.remove('hidden');
+            loading.classList.remove('hidden');
+            aiText.classList.add('hidden');
+            aiText.innerHTML = "";
+
+            fetch(fetchUrl)
+                .then(response => response.json())
+                .then(data => {
+                    loading.classList.add('hidden');
+
+                    if (data.status === 'success' && data.analysis) {
+                        let formatted = data.analysis
+                            .replace(/\n/g, '<br>')
+                            .replace(/\*\*(.*?)\*\*/g, '<b class="text-white">$1</b>')
+                            .replace(/\*(.*?)\*/g, '<i>$1</i>');
+
+                        aiText.innerHTML = formatted;
+                        aiText.classList.remove('hidden');
+                    } else {
+                        aiText.innerHTML = `<span class="text-red-400">❌ AI Hatası: ${data.message || 'Veri alınamadı'}</span>`;
+                        aiText.classList.remove('hidden');
+                    }
+                })
+                .catch(error => {
+                    console.error("Fetch Hatası:", error);
+                    loading.classList.add('hidden');
+                    aiText.innerHTML = `<span class="text-red-400">❌ Bağlantı hatası: Sayfayı yenileyip tekrar deneyin.</span>`;
+                    aiText.classList.remove('hidden');
+                })
+                .finally(() => {
+                    btn.disabled = false;
+                    btn.classList.remove('opacity-50', 'cursor-not-allowed');
+                });
+        };
+
+        window.kopyalaLink = function() {
+            navigator.clipboard.writeText(window.location.href).then(() => {
+                if (typeof uyariGoster === 'function') {
+                    uyariGoster("Sonuç bağlantısı kopyalandı! 📊", "success");
+                } else {
+                    alert("Bağlantı kopyalandı!");
+                }
+            });
+        };
+
+        {% if question.total_votes > 0 %}
+        // Chart.js Kodları
+        const labels = [{% for choice in question.choice_set.all %}"{{ choice.choice_text|escapejs }}",{% endfor %}];
+        const data = [{% for choice in question.choice_set.all %}{{ choice.votes }},{% endfor %}];
+
+        const backgroundColors = [
+            'rgba(147, 51, 234, 0.8)', 'rgba(59, 130, 246, 0.8)', 'rgba(16, 185, 129, 0.8)',
+            'rgba(245, 158, 11, 0.8)', 'rgba(236, 72, 153, 0.8)', 'rgba(14, 165, 233, 0.8)'
+        ];
+        const borderColors = [
+            'rgba(147, 51, 234, 1)', 'rgba(59, 130, 246, 1)', 'rgba(16, 185, 129, 1)',
+            'rgba(245, 158, 11, 1)', 'rgba(236, 72, 153, 1)', 'rgba(14, 165, 233, 1)'
+        ];
+
+        const dots = document.querySelectorAll('.color-dot');
+        dots.forEach((dot, index) => {
+            let colorIndex = index % backgroundColors.length;
+            dot.style.backgroundColor = backgroundColors[colorIndex];
+        });
+
+        const ctx = document.getElementById('resultsChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: data, backgroundColor: backgroundColors, borderColor: borderColors,
+                    borderWidth: 2, hoverOffset: 10
+                }]
+            },
+            options: {
+                responsive: true, cutout: '75%',
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: 'rgba(15, 23, 42, 0.9)', titleColor: '#fff', bodyColor: '#cbd5e1',
+                        borderColor: 'rgba(255,255,255,0.1)', borderWidth: 1, padding: 12, cornerRadius: 8, displayColors: true,
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.label || '';
+                                if (label) label += ': ';
+                                if (context.parsed !== null) {
+                                    let total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                    let percentage = Math.round((context.parsed / total) * 100);
+                                    label += context.parsed + ' Oy (%' + percentage + ')';
+                                }
+                                return label;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+        {% endif %}
+    });
+</script>
+{% endblock %}

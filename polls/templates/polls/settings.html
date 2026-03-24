@@ -1,0 +1,74 @@
+﻿{% extends "polls/base.html" %}
+{% block content %}
+<div class="py-10 flex justify-center animate-fade-in">
+    <div class="w-full max-w-4xl space-y-8">
+
+        <div class="bg-white/5 border border-white/10 rounded-3xl p-8 backdrop-blur-xl shadow-2xl relative overflow-hidden">
+            <div class="absolute -top-20 -right-20 w-64 h-64 bg-purple-600/20 rounded-full blur-3xl pointer-events-none"></div>
+
+            <div class="relative z-10 flex flex-col md:flex-row items-center gap-8">
+                <div class="w-32 h-32 shrink-0 rounded-full bg-gradient-to-tr from-purple-600 to-blue-600 p-1 shadow-[0_0_30px_rgba(147,51,234,0.3)]">
+                    <div class="w-full h-full bg-slate-900 rounded-full flex items-center justify-center text-5xl font-bold text-white">
+                        {{ user.username|make_list|first|upper }}
+                    </div>
+                </div>
+
+                <div class="flex-grow text-center md:text-left">
+                    <h2 class="text-3xl font-bold text-white mb-2">{{ user.username }}</h2>
+                    <p class="text-purple-400 font-medium text-xl mb-6">{{ user.profile.badge }}</p>
+
+                    <div class="flex flex-wrap justify-center md:justify-start gap-4">
+                        <div class="bg-slate-900/50 border border-white/10 rounded-2xl px-6 py-3 text-center transition-colors hover:bg-slate-800/50">
+                            <p class="text-slate-400 text-xs uppercase tracking-wider mb-1">Cüzdan</p>
+                            <p class="text-2xl font-bold text-amber-400">{{ user.profile.points }} 🪙</p>
+                        </div>
+                        <div class="bg-slate-900/50 border border-white/10 rounded-2xl px-6 py-3 text-center transition-colors hover:bg-slate-800/50">
+                            <p class="text-slate-400 text-xs uppercase tracking-wider mb-1">Çözülen</p>
+                            <p class="text-2xl font-bold text-emerald-400">{{ solved_count }} ✅</p>
+                        </div>
+                        <div class="bg-slate-900/50 border border-white/10 rounded-2xl px-6 py-3 text-center transition-colors hover:bg-slate-800/50">
+                            <p class="text-slate-400 text-xs uppercase tracking-wider mb-1">Oluşturulan</p>
+                            <p class="text-2xl font-bold text-blue-400">{{ created_count }} 📝</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white/5 border border-white/10 rounded-3xl p-8 backdrop-blur-xl shadow-2xl">
+            <h3 class="text-2xl font-bold text-white mb-6 border-b border-white/10 pb-4">Hesap Ayarları</h3>
+
+            {% if messages %}
+            {% for message in messages %}
+            <div class="bg-emerald-500/20 border border-emerald-500/50 text-emerald-400 p-4 rounded-xl mb-6">
+                {{ message }}
+            </div>
+            {% endfor %}
+            {% endif %}
+
+            <form method="post" class="space-y-6">
+                {% csrf_token %}
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-slate-400 text-sm mb-2">Ad</label>
+                        <input type="text" name="first_name" value="{{ user.first_name }}" class="w-full bg-slate-900 border border-white/10 rounded-xl p-3 text-white focus:border-purple-500 outline-none transition-colors">
+                    </div>
+                    <div>
+                        <label class="block text-slate-400 text-sm mb-2">Soyad</label>
+                        <input type="text" name="last_name" value="{{ user.last_name }}" class="w-full bg-slate-900 border border-white/10 rounded-xl p-3 text-white focus:border-purple-500 outline-none transition-colors">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-slate-400 text-sm mb-2">E-posta</label>
+                    <input type="email" name="email" value="{{ user.email }}" class="w-full bg-slate-900 border border-white/10 rounded-xl p-3 text-white focus:border-purple-500 outline-none transition-colors">
+                </div>
+
+                <button type="submit" class="w-full py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold rounded-xl hover:scale-[1.02] transition-transform shadow-[0_0_15px_rgba(147,51,234,0.3)]">
+                    Bilgileri Güncelle
+                </button>
+            </form>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

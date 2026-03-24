@@ -1,0 +1,315 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-03-24 09:43+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: .\mysite_\settings.py:99
+msgid "Türkçe"
+msgstr "Turkish"
+
+#: .\mysite_\settings.py:100
+msgid "English"
+msgstr "English"
+
+#: .\polls\models.py:12
+msgid "soru metni"
+msgstr "question text"
+
+#: .\polls\models.py:13
+msgid "yayınlanma tarihi"
+msgstr "publish date"
+
+#: .\polls\models.py:16
+msgid "bitiş tarihi"
+msgstr "end date"
+
+#: .\polls\models.py:19
+msgid "gizli mi?"
+msgstr "is private?"
+
+#: .\polls\models.py:22
+msgid "yazar"
+msgstr "author"
+
+#: .\polls\models.py:23
+msgid "onaylandı mı?"
+msgstr "is approved?"
+
+#: .\polls\models.py:26
+msgid "resim"
+msgstr "image"
+
+#: .\polls\models.py:51
+msgid "seçenek metni"
+msgstr "choice text"
+
+#: .\polls\models.py:52
+msgid "oylar"
+msgstr "votes"
+
+#: .\polls\models.py:88
+msgid "🌱 Çaylak"
+msgstr "🌱 Rookie"
+
+#: .\polls\models.py:90
+msgid "✍️ Anketör"
+msgstr "✍️ Surveyor"
+
+#: .\polls\models.py:92
+msgid "🔍 Analist"
+msgstr "🔍 Analyst"
+
+#: .\polls\models.py:94
+msgid "👑 Üstat"
+msgstr "👑 Master"
+
+#: .\polls\templates\polls\base.html:7
+msgid "Modern Anket Platformu"
+msgstr "Modern Survey Platform"
+
+#: .\polls\templates\polls\base.html:67
+msgid "Tüm Anketler"
+msgstr "All Surveys"
+
+#: .\polls\templates\polls\base.html:83
+msgid "Kullanılabilir Puanın"
+msgstr "Available Points"
+
+#: .\polls\templates\polls\base.html:89
+msgid "Anket Oluştur"
+msgstr "Create Survey"
+
+#: .\polls\templates\polls\base.html:100
+msgid "Giriş Yap"
+msgstr "Log In"
+
+#: .\polls\templates\polls\base.html:101
+msgid "Hesap Oluştur"
+msgstr "Create Account"
+
+#: .\polls\templates\polls\base.html:125
+msgid "Yeni Anket Oluştur"
+msgstr "Create New Survey"
+
+#: .\polls\templates\polls\base.html:129
+msgid "Anketlerim"
+msgstr "My Surveys"
+
+#: .\polls\templates\polls\base.html:132
+msgid "Hesap Ayarları"
+msgstr "Account Settings"
+
+#: .\polls\templates\polls\base.html:138
+msgid "Tema Değiştir"
+msgstr "Toggle Theme"
+
+#: .\polls\templates\polls\base.html:147
+msgid "Çıkış Yap"
+msgstr "Log Out"
+
+#: .\polls\templates\polls\home.html:13
+msgid "Lansman Özel"
+msgstr "Launch Special"
+
+#: .\polls\templates\polls\home.html:15
+msgid "SINIRLI KONTENJAN"
+msgstr "LIMITED SLOTS"
+
+#: .\polls\templates\polls\home.html:21
+msgid "İlk 500 şanslı üyeye anında"
+msgstr "First 500 lucky members get an instant"
+
+#: .\polls\templates\polls\home.html:21
+msgid "Puan"
+msgstr "Points"
+
+#: .\polls\templates\polls\home.html:21
+msgid "hediye!"
+msgstr "gift!"
+
+#: .\polls\templates\polls\home.html:22
+msgid "Şu an:"
+msgstr "Currently:"
+
+#: .\polls\templates\polls\home.html:25
+msgid "Hediye puan kampanyamız sona ermiştir. İlginize teşekkürler!"
+msgstr "Our gift points campaign has ended. Thank you for your interest!"
+
+#: .\polls\templates\polls\home.html:33
+msgid "Kalan Slot:"
+msgstr "Remaining Slots:"
+
+#: .\polls\templates\polls\home.html:37
+msgid "Puanımı Al"
+msgstr "Claim My Points"
+
+#: .\polls\templates\polls\home.html:41
+msgid "Kayıtlar Devam Ediyor"
+msgstr "Registrations are Open"
+
+#: .\polls\templates\polls\home.html:48
+msgid "Fikrini Sor,"
+msgstr "Ask for Opinions,"
+
+#: .\polls\templates\polls\home.html:48
+msgid "Puanları Topla."
+msgstr "Collect Points."
+
+#: .\polls\templates\polls\home.html:51
+msgid "Sıkıcı anket formlarını unutun."
+msgstr "Forget boring survey forms."
+
+#: .\polls\templates\polls\home.html:51
+msgid "ile topluluğun nabzını tutun, görevleri tamamlayın ve seviye atlayın."
+msgstr "to keep a pulse on the community, complete tasks, and level up."
+
+#: .\polls\templates\polls\home.html:55
+msgid "Anketleri Keşfet"
+msgstr "Explore Surveys"
+
+#: .\polls\templates\polls\home.html:59
+msgid "Ücretsiz Hesap Oluştur"
+msgstr "Create a Free Account"
+
+#: .\polls\templates\polls\home.html:66
+msgid "Sistem Nasıl İşliyor?"
+msgstr "How Does the System Work?"
+
+#: .\polls\templates\polls\home.html:70
+msgid "Fikrini Sor"
+msgstr "Ask for Opinions"
+
+#: .\polls\templates\polls\home.html:71
+msgid "50 🪙 harcayarak herkese açık veya gizli grup anketleri oluştur. Anında sonuçları gör."
+msgstr "Create public or private group surveys by spending 50 🪙. See results instantly."
+
+#: .\polls\templates\polls\home.html:75
+msgid "Oyla & Kazan"
+msgstr "Vote & Win"
+
+#: .\polls\templates\polls\home.html:76
+msgid "Topluluk anketlerine katılıp fikirlerini belirt, anında 10 🪙 kazanarak cüzdanını doldur."
+msgstr "Participate in community surveys, share your opinions, and instantly earn 10 🪙 to fill your wallet."
+
+#: .\polls\templates\polls\home.html:80
+msgid "Seviye Atla"
+msgstr "Level Up"
+
+#: .\polls\templates\polls\home.html:81
+msgid "Puanlarını biriktir, Çaylak seviyesinden Üstat seviyesine yüksel ve rozetleri kap."
+msgstr "Accumulate your points, rise from Rookie to Master level, and grab the badges."
+
+#: .\polls\templates\polls\home.html:90
+msgid "Topluluk Liderleri"
+msgstr "Community Leaders"
+
+#: .\polls\templates\polls\home.html:91
+msgid "En çok anket çözen ve üreten ilk 10 şampiyonumuz."
+msgstr "Our top 10 champions who have solved and created the most surveys."
+
+#: .\polls\templates\polls\home.html:119
+msgid "Sen"
+msgstr "You"
+
+#: .\polls\templates\polls\home.html:140
+msgid "Henüz kimse puan kazanmamış. Liderlik koltuğu boş, hemen ilk anketini çöz!"
+msgstr "No one has earned points yet. The leaderboard is empty, solve your first survey now!"
+
+#: .\polls\templates\polls\home.html:149
+msgid "Puan Market & Üyelikler"
+msgstr "Point Market & Memberships"
+
+#: .\polls\templates\polls\home.html:150
+msgid "Anket çözerek kazandığınız puanlarla profilinizi bir üst seviyeye taşıyın."
+msgstr "Take your profile to the next level with the points you earn by solving surveys."
+
+#: .\polls\templates\polls\home.html:155
+msgid "Standart Üye"
+msgstr "Standard Member"
+
+#: .\polls\templates\polls\home.html:156
+msgid "Sisteme yeni katılan herkes için."
+msgstr "For everyone newly joined to the system."
+
+#: .\polls\templates\polls\home.html:159
+msgid "hediye"
+msgstr "gift"
+
+#: .\polls\templates\polls\home.html:162
+msgid "Topluluk anketlerine katılım"
+msgstr "Participation in community surveys"
+
+#: .\polls\templates\polls\home.html:163
+msgid "Anket başına 10 🪙 kazanç"
+msgstr "Earn 10 🪙 per survey"
+
+#: .\polls\templates\polls\home.html:165
+msgid "Sana Özel Başlangıç"
+msgstr "Your Special Start"
+
+#: .\polls\templates\polls\home.html:169
+msgid "En Popüler"
+msgstr "Most Popular"
+
+#: .\polls\templates\polls\home.html:170
+msgid "Premium Anketör"
+msgstr "Premium Surveyor"
+
+#: .\polls\templates\polls\home.html:171
+msgid "Platformda öne çıkmak isteyenler için."
+msgstr "For those who want to stand out on the platform."
+
+#: .\polls\templates\polls\home.html:174
+msgid "aylık"
+msgstr "monthly"
+
+#: .\polls\templates\polls\home.html:177
+msgid "İsminin yanında 🌟 VIP Rozeti"
+msgstr "🌟 VIP Badge next to your name"
+
+#: .\polls\templates\polls\home.html:178
+msgid "Anket çözünce 1.5x kazanç"
+msgstr "1.5x earnings when you solve surveys"
+
+#: .\polls\templates\polls\home.html:181
+msgid "500 🪙 İle Satın Al"
+msgstr "Buy with 500 🪙"
+
+#: .\polls\templates\polls\home.html:186
+msgid "Efsanevi Üstat"
+msgstr "Legendary Master"
+
+#: .\polls\templates\polls\home.html:187
+msgid "Sınır tanımayan profesyoneller için."
+msgstr "For professionals who know no boundaries."
+
+#: .\polls\templates\polls\home.html:190
+msgid "kalıcı"
+msgstr "permanent"
+
+#: .\polls\templates\polls\home.html:193
+msgid "Üstat tacı 👑 rozeti"
+msgstr "Master crown 👑 badge"
+
+#: .\polls\templates\polls\home.html:194
+msgid "Ücretsiz sınırsız anket"
+msgstr "Free unlimited surveys"
+
+#: .\polls\templates\polls\home.html:197
+msgid "2000 🪙 İle Satın Al"
+msgstr "Buy with 2000 🪙"

@@ -1,0 +1,64 @@
+﻿{% extends "polls/base.html" %}
+{% block content %}
+<div class="py-20 flex justify-center animate-fade-in">
+    <div class="w-full max-w-md p-8 bg-white/5 border border-white/10 rounded-3xl backdrop-blur-xl shadow-2xl">
+        <h2 class="text-3xl font-bold text-white mb-6 text-center">Hesap Oluştur</h2>
+
+        <form method="post" class="space-y-4 text-slate-200 custom-form">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="w-full mt-6 px-8 py-3 rounded-xl font-semibold text-white bg-gradient-to-r from-blue-600 to-purple-600 shadow-[0_0_20px_rgba(59,130,246,0.3)] hover:scale-105 transition-all">
+                Kayıt Ol ve Başla
+            </button>
+        </form>
+
+        <div class="mt-6 text-center text-sm text-slate-400">
+            Zaten hesabın var mı? <a href="{% url 'polls:login' %}" class="text-purple-400 hover:text-purple-300 font-medium">Giriş Yap</a>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Django form elemanlarını modernleştirme */
+    .custom-form p {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .custom-form input {
+        background: rgba(15, 23, 42, 0.8);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 0.5rem;
+        padding: 0.75rem;
+        color: white;
+        width: 100%;
+    }
+
+        .custom-form input:focus {
+            outline: none;
+            border-color: #8b5cf6;
+        }
+
+    .custom-form label {
+        font-size: 0.875rem;
+        color: #cbd5e1;
+        font-weight: 500;
+    }
+
+    .helptext {
+        font-size: 0.75rem;
+        color: #94a3b8;
+        margin-top: 0.25rem;
+    }
+
+    .errorlist {
+        font-size: 0.75rem;
+        color: #f87171;
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+    }
+</style>
+{% endblock %}

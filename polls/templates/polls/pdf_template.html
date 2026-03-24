@@ -1,0 +1,155 @@
+﻿<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Anket Raporu</title>
+    <style>
+        /* @font-face TAMAMEN SİLİNDİ - Temp hatasını çıkaran buydu! */
+        @page {
+            size: A4;
+            margin: 2cm;
+            @frame
+
+            footer_frame {
+                -pdf-frame-content: footer_content;
+                left: 50pt;
+                width: 512pt;
+                top: 772pt;
+                height: 20pt;
+            }
+        }
+
+        body {
+            /* Python'da ezdiğimiz Arial'i kullanacak */
+            font-family: Arial, sans-serif;
+            color: #333333;
+            line-height: 1.5;
+        }
+
+        .header {
+            text-align: center;
+            border-bottom: 2px solid #6b21a8;
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            color: #6b21a8;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            color: #666666;
+        }
+
+        .question-box {
+            background-color: #f3f4f6;
+            padding: 20px;
+            border-left: 5px solid #3b82f6;
+            margin-bottom: 30px;
+        }
+
+        .question-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin: 0;
+            color: #1e293b;
+        }
+
+        .total-votes {
+            font-size: 14px;
+            color: #475569;
+            margin-top: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #cbd5e1;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f8fafc;
+            color: #0f172a;
+            font-weight: bold;
+        }
+
+        .percentage-bar-container {
+            width: 100px;
+            background-color: #e2e8f0;
+            height: 12px;
+            border-radius: 6px;
+            display: inline-block;
+        }
+
+        .percentage-bar {
+            background-color: #8b5cf6;
+            height: 12px;
+            border-radius: 6px;
+        }
+
+        .footer {
+            text-align: center;
+            font-size: 12px;
+            color: #94a2b8;
+            border-top: 1px solid #e2e8f0;
+            padding-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div class="logo">AnketHub</div>
+        <div class="subtitle">Kurumsal Analiz ve Sonuç Raporu</div>
+    </div>
+
+    <div class="question-box">
+        <h2 class="question-title">Soru: {{ question.question_text }}</h2>
+        <div class="total-votes">Katılımcı Sayısı: <strong>{{ question.total_votes }} Kişi</strong></div>
+    </div>
+
+    <h3>Oylama Dağılımı</h3>
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 50%;">Seçenek</th>
+                <th style="width: 15%; text-align: center;">Oy Sayısı</th>
+                <th style="width: 35%;">Oran</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for choice in question.choice_set.all %}
+            <tr>
+                <td>{{ choice.choice_text }}</td>
+                <td style="text-align: center;"><strong>{{ choice.votes }}</strong></td>
+                <td>
+                    {% if question.total_votes > 0 %}
+                    <div class="percentage-bar-container">
+                        <div class="percentage-bar" style="width: {% widthratio choice.votes question.total_votes 100 %}px;"></div>
+                    </div>
+                    <span style="font-size: 12px; margin-left: 5px;">%{% widthratio choice.votes question.total_votes 100 %}</span>
+                    {% else %}
+                    %0
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div id="footer_content" class="footer">
+        Bu belge AnketHub sistemi tarafından otomatik olarak oluşturulmuştur. <br>
+        Tarih: {% now "d F Y H:i" %}
+    </div>
+
+</body>
+</html>

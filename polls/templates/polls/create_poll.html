@@ -1,0 +1,135 @@
+﻿{% extends "polls/base.html" %}
+
+{% block content %}
+<div class="py-10 flex justify-center animate-fade-in">
+    <div class="w-full max-w-2xl p-8 bg-white/5 border border-white/10 rounded-3xl backdrop-blur-xl shadow-2xl relative overflow-hidden">
+
+        <div class="absolute -right-20 -top-20 w-64 h-64 bg-amber-500/10 rounded-full blur-[80px] pointer-events-none"></div>
+
+        <div class="flex justify-between items-center mb-8 border-b border-white/10 pb-6 relative z-10">
+            <h2 class="text-3xl font-bold text-white">Yeni Anket Oluştur</h2>
+
+            <span class="bg-purple-500/20 text-purple-300 px-4 py-2 rounded-xl font-bold border border-purple-500/30 flex items-center gap-2 shadow-[0_0_10px_rgba(168,85,247,0.2)]">
+                Bedel: {{ required_points }} 🪙
+            </span>
+        </div>
+
+        <form action="{% url 'polls:create' %}" method="post" enctype="multipart/form-data" class="space-y-6 relative z-10">
+            {% csrf_token %}
+
+            <div>
+                <div class="flex justify-between items-center mb-2">
+                    <label class="block text-slate-300 font-medium" for="question_text">Anket Sorusu</label>
+
+                    <button type="button" onclick="aiTaslakOlustur()" class="text-xs sm:text-sm bg-gradient-to-r from-amber-500 to-orange-500 text-white px-3 py-1.5 rounded-lg font-bold shadow-[0_0_15px_rgba(245,158,11,0.4)] hover:shadow-[0_0_25px_rgba(245,158,11,0.6)] hover:scale-105 active:scale-95 transition-all flex items-center gap-1.5">
+                        <span id="ai-btn-icon" class="animate-pulse">✨</span>
+                        <span id="ai-btn-text">AI ile Taslak Üret</span>
+                    </button>
+                </div>
+
+                <input type="text" name="question_text" id="question_text" required
+                       class="w-full px-4 py-3 bg-slate-900/50 border border-white/10 rounded-xl text-white focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition-all placeholder-slate-500"
+                       placeholder="Örn: 2026'nın en popüler yazılım dili hangisi?">
+                <p class="text-xs text-slate-500 mt-2">💡 <span class="text-slate-400">İpucu:</span> Kutuya sadece konuyu yazıp "AI ile Taslak Üret" butonuna basarak yapay zekadan fikir alabilirsiniz.</p>
+            </div>
+
+            <div>
+                <label class="block text-slate-300 font-medium mb-2" for="image">Kapak Görseli (Opsiyonel)</label>
+                <input type="file" name="image" id="image" accept="image/*"
+                       class="w-full px-4 py-3 bg-slate-900/50 border border-white/10 rounded-xl text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-purple-500/20 file:text-purple-300 hover:file:bg-purple-500/30 transition-all cursor-pointer">
+            </div>
+
+            <div class="space-y-3">
+                <label class="block text-slate-300 font-medium mb-2">Seçenekler</label>
+                <input type="text" name="choice" id="choice_1" required placeholder="1. Seçenek" class="w-full px-4 py-3 bg-slate-900/50 border border-white/10 rounded-xl text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all placeholder-slate-600">
+                <input type="text" name="choice" id="choice_2" required placeholder="2. Seçenek" class="w-full px-4 py-3 bg-slate-900/50 border border-white/10 rounded-xl text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all placeholder-slate-600">
+                <input type="text" name="choice" id="choice_3" placeholder="3. Seçenek (Opsiyonel)" class="w-full px-4 py-3 bg-slate-900/50 border border-white/10 rounded-xl text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all placeholder-slate-600">
+                <input type="text" name="choice" id="choice_4" placeholder="4. Seçenek (Opsiyonel)" class="w-full px-4 py-3 bg-slate-900/50 border border-white/10 rounded-xl text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all placeholder-slate-600">
+            </div>
+
+            <div class="p-5 bg-blue-900/10 border border-blue-500/30 rounded-2xl flex items-start gap-4 mt-6 hover:bg-blue-900/20 transition-colors">
+                <div class="flex-shrink-0 mt-1">
+                    <input type="checkbox" name="is_private" id="is_private" class="w-5 h-5 rounded border-slate-600 text-blue-500 focus:ring-blue-500 bg-slate-800 cursor-pointer">
+                </div>
+                <div>
+                    <label for="is_private" class="text-white font-medium cursor-pointer block mb-1 text-lg">
+                        🕵️‍♂️ Bu anket Gizli olsun (Grup Anketi)
+                    </label>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        İşaretlerseniz anket ana sayfadaki "Tüm Anketler" listesinde <strong class="text-slate-300">görünmez</strong>. Sadece anketin linkini WhatsApp, Telegram vb. üzerinden gönderdiğiniz kişiler katılabilir.
+                    </p>
+                </div>
+            </div>
+
+            <div class="pt-6 border-t border-white/10 flex justify-end">
+                <button type="submit" class="px-8 py-4 rounded-xl font-bold text-white bg-gradient-to-r from-blue-600 to-purple-600 shadow-[0_0_20px_rgba(147,51,234,0.3)] hover:shadow-[0_0_25px_rgba(147,51,234,0.5)] transition-all duration-200 hover:-translate-y-1 w-full sm:w-auto text-lg">
+                    Anketi Onaya Gönder
+                </button>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<script>
+    async function aiTaslakOlustur() {
+        const soruInput = document.getElementById('question_text');
+        let konu = soruInput.value.trim();
+
+        // 1. Kutu boşsa SweetAlert ile kullanıcıya soralım (UX Şovu)
+        if (!konu) {
+            const { value: text } = await Swal.fire({
+                title: '✨ AI Anket Sihirbazı',
+                input: 'text',
+                inputLabel: 'Hangi konuda bir anket üretelim?',
+                inputPlaceholder: 'Örn: Sivas yemekleri, Oyun konsolları, Parfümler...',
+                background: '#1e293b',
+                color: '#fff',
+                showCancelButton: true,
+                cancelButtonText: 'İptal',
+                confirmButtonText: 'Üret',
+                confirmButtonColor: '#f59e0b',
+                cancelButtonColor: '#64748b'
+            });
+
+            if (text) {
+                konu = text;
+            } else {
+                return; // Kullanıcı iptal tuşuna bastı
+            }
+        }
+
+        // 2. Buton durumunu "Üretiliyor" olarak değiştir
+        const btnText = document.getElementById('ai-btn-text');
+        const originalText = btnText.innerText;
+        btnText.innerText = "Üretiliyor... ⏳";
+
+        try {
+            // 3. Backend'deki AI rotamıza istek at
+            const response = await fetch(`{% url 'polls:ai_draft_poll' %}?topic=${encodeURIComponent(konu)}`);
+            const data = await response.json();
+
+            if (data.error) {
+                uyariGoster(data.error, 'error'); // base.html'deki fonksiyonumuz
+            } else {
+                // 4. Gelen verileri inputlara otomatik yerleştir
+                soruInput.value = data.soru;
+
+                // Eğer AI şık gönderdiyse ilgili kutulara yaz, yoksa boş bırak
+                document.getElementById('choice_1').value = data.siklar[0] || '';
+                document.getElementById('choice_2').value = data.siklar[1] || '';
+                document.getElementById('choice_3').value = data.siklar[2] || '';
+                document.getElementById('choice_4').value = data.siklar[3] || '';
+
+                // Başarı bildirimi
+                uyariGoster("✨ Harika bir taslak oluşturuldu!", 'success');
+            }
+        } catch (error) {
+            uyariGoster("Bağlantı hatası oluştu. Lütfen tekrar deneyin.", 'error');
+        } finally {
+            // 5. İşlem bitince butonu eski haline getir
+            btnText.innerText = originalText;
+        }
+    }
+</script>
+{% endblock %}
