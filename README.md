@@ -20,7 +20,18 @@ AnketHub, klasik ve sıkıcı anket formlarını modern bir kullanıcı deneyimi
 * **Araçlar:** xhtml2pdf, ReportLab, Django-i18n
 
 ## 📸 Ekran Görüntüleri
-*(Buraya projeni çalıştırıp aldığın 2-3 güzel ekran görüntüsünü sürükleyip bırakabilirsin)*
+<img width="1919" height="688" alt="image" src="https://github.com/user-attachments/assets/ec807e43-f310-4aa8-a91f-ab8dd781d1f0" />
+<img width="1919" height="938" alt="image" src="https://github.com/user-attachments/assets/d62991cf-7d21-48b0-807e-651a339363fa" />
+<img width="1919" height="942" alt="image" src="https://github.com/user-attachments/assets/a9a3401f-21c3-4682-9d1a-43d01348bde9" />
+<img width="1919" height="944" alt="image" src="https://github.com/user-attachments/assets/762f9752-06f2-43a3-a78c-ef1741022612" />
+<img width="1919" height="943" alt="image" src="https://github.com/user-attachments/assets/302a6c32-6d32-4baa-9109-9a1da1b033d8" />
+<img width="1919" height="946" alt="image" src="https://github.com/user-attachments/assets/cb5aa8b6-ff72-40fc-b97b-658d557c6b0d" />
+<img width="1919" height="946" alt="image" src="https://github.com/user-attachments/assets/4a561d1a-483e-4dcd-9766-9156f1617e86" />
+<img width="1919" height="947" alt="image" src="https://github.com/user-attachments/assets/8b508da5-7d06-411e-a144-beb61bbc674e" />
+<img width="1919" height="945" alt="image" src="https://github.com/user-attachments/assets/65386460-36e3-48db-9c82-898f5cead26e" />
+<img width="1919" height="938" alt="image" src="https://github.com/user-attachments/assets/585d22c3-90e3-48c3-a922-109071542174" />
+
+
 
 ## 🚀 Kurulum ve Çalıştırma
 
