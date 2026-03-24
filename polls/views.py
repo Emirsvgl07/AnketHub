@@ -27,7 +27,7 @@ from .models import Choice, Question, Vote
 from .forms import ExtendedUserCreationForm # YENİ EKLENDİ
 
 # --- AI AYARLARI ---
-genai.configure(api_key="AIzaSyDEQbXM7mofeGp7tK-JO8gEPzvhpNHldBg")
+genai.configure(api_key=os.environ.get('GEMINI_API_KEY'))
 
 # --- GENEL GÖRÜNÜMLER ---
 
