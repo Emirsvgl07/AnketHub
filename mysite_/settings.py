@@ -23,20 +23,16 @@ ALLOWED_HOSTS = ['anket-hub.com', 'www.anket-hub.com', 'ankethub.onrender.com', 
 
 # Application definition
 INSTALLED_APPS = [
-    # 🌟 CLOUDINARY BURAYA (Mutlaka staticfiles'ın üstünde olmalı)
-    'cloudinary_storage', 
-    
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
-    "django.contrib.staticfiles",
+    "django.contrib.staticfiles", # 🌟 ŞEF ARTIK BU: Dosyaları engelsiz toplayacak
     
-    # 🌟 CLOUDINARY KÜTÜPHANESİ
+    'cloudinary_storage', # Cloudinary'nin yetkisini aldık, sadece resimlere bakacak
     'cloudinary',
 
-    # Bizim uygulamamız
     "polls.apps.PollsConfig",  
 ]
 
