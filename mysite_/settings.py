@@ -19,7 +19,7 @@ SECRET_KEY = 'django-insecure-j87hwp1^rlb5(wntu(d-lss-2lrbplqi81w*0_#^mfsuz0_)wg
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['anket-hub.com', 'www.anket-hub.com', 'ankethub.onrender.com']
+ALLOWED_HOSTS = ['anket-hub.com', 'www.anket-hub.com', 'ankethub.onrender.com','127.0.0.1']
 
 
 # Application definition
