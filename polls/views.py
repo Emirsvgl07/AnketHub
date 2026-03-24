@@ -129,7 +129,6 @@ def create_poll(request):
         choices = request.POST.getlist('choice')
         image = request.FILES.get('image')
         
-        # 🐛 BUG FİX: Checkbox "true" veya "on" gönderebilir
         is_private = request.POST.get('is_private') in ['on', 'true'] 
         
         if question_text and choices:
@@ -173,20 +172,17 @@ def ai_analyze_poll(request, question_id):
     {choices_text}
     """
     try:
-        model = genai.GenerativeModel('gemini-1.5-flash') # AI Modeli Güncellendi
+        # Dinamik Model Seçimi (404 Hatasını Engeller)
+        secilen = next(m.name for m in genai.list_models() if 'generateContent' in m.supported_generation_methods)
+        model = genai.GenerativeModel(secilen)
         response = model.generate_content(prompt)
+        
         if response.text:
             return JsonResponse({'status': 'success', 'analysis': response.text})
         else:
             return JsonResponse({'status': 'error', 'message': 'AI yanıt döndüremedi.'})
     except Exception as e:
-        try:
-            secilen = next(m.name for m in genai.list_models() if 'generateContent' in m.supported_generation_methods)
-            model = genai.GenerativeModel(secilen)
-            response = model.generate_content(prompt)
-            return JsonResponse({'status': 'success', 'analysis': response.text})
-        except:
-            return JsonResponse({'status': 'error', 'message': f'Detaylı Hata: {str(e)}'})
+        return JsonResponse({'status': 'error', 'message': f'Detaylı Hata: {str(e)}'})
 
 @login_required
 def ai_draft_poll(request):
@@ -200,8 +196,11 @@ def ai_draft_poll(request):
     {{"soru": "Ürettiğin Soru Metni", "siklar": ["Şık 1", "Şık 2", "Şık 3", "Şık 4"]}}
     """
     try:
-        model = genai.GenerativeModel('gemini-1.5-flash') # AI Modeli Güncellendi
+        # Dinamik Model Seçimi (404 Hatasını Engeller)
+        secilen = next(m.name for m in genai.list_models() if 'generateContent' in m.supported_generation_methods)
+        model = genai.GenerativeModel(secilen)
         response = model.generate_content(prompt)
+        
         try:
             clean_json = re.search(r'\{.*\}', response.text, re.DOTALL).group()
             data = json.loads(clean_json)
