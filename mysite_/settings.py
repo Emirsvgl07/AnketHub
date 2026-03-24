@@ -122,7 +122,8 @@ STORAGES = {
         "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
     },
     "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+        # 🌟 DEĞİŞEN SATIR BURASI: WhiteNoise artık dosya içi linkleri kontrol edip hata vermeyecek!
+        "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
     },
 }
 
