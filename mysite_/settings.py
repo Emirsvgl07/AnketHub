@@ -125,3 +125,6 @@ STORAGES = {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
     },
 }
+
+# WhiteNoise'un eksik (kırık) ikon/resim linkleri yüzünden sistemi çökertmesini engeller
+WHITENOISE_MANIFEST_STRICT = False
