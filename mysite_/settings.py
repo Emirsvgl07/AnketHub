@@ -122,7 +122,6 @@ STORAGES = {
         "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
     },
     "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage", # 🌟 CSS'LERİ ARTIK WHITENOISE SUNACAK
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
     },
-}
 }
