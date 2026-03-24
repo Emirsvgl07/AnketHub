@@ -122,10 +122,10 @@ STORAGES = {
         "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
     },
     "staticfiles": {
-        # 🌟 DEĞİŞEN SATIR BURASI: WhiteNoise artık dosya içi linkleri kontrol edip hata vermeyecek!
-        "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
+        # 🌟 WhiteNoise'u kovduk! Sadece standart Django toplayıcısını kullanıyoruz. Asla çökmez.
+        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
     },
 }
 
-# WhiteNoise'un eksik (kırık) ikon/resim linkleri yüzünden sistemi çökertmesini engeller
+# (Bu kalabilir, zararı yok)
 WHITENOISE_MANIFEST_STRICT = False
