@@ -102,7 +102,7 @@ USE_TZ = True
 
 
 # --- STATIC VE MEDIA DOSYALARI ---
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # 1. Cloudinary Kimlik Ayarları
